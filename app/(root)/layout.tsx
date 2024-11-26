@@ -1,9 +1,14 @@
+
+import React from 'react'
+import { redirect } from 'next/navigation';
+
+import { getCurrentUser } from '@/server/actions/users.actions';
+
 import Header from '@/components/header';
 import MobileNavigation from '@/components/mobile-navigation';
 import Sidebar from '@/components/sidebar';
-import { getCurrentUser } from '@/server/actions/users.actions';
-import { redirect } from 'next/navigation';
-import React from 'react'
+import { Toaster } from '@/components/ui/toaster';
+
 
 const RootLayout = async ({ children }: { children: React.ReactNode }) => {
 
@@ -21,7 +26,7 @@ const RootLayout = async ({ children }: { children: React.ReactNode }) => {
                 <div className="main-content">{children}</div>
             </section>
 
-            {/* <Toaster /> */}
+            <Toaster />
         </main>
     );
 }
