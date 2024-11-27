@@ -134,7 +134,14 @@ export const getFiles = async ({
             queries,
         );
 
-        return parseStringify(files);
+        let totalSpace = 0;
+
+        files.documents.forEach((file) => {
+            totalSpace += file.size;
+        });
+
+        // return parseStringify(files);
+        return parseStringify({ files, totalSpace });
     } catch (error) {
         handleError(error, "Failed to get files");
     }
