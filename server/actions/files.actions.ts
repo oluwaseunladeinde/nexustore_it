@@ -93,6 +93,26 @@ const createQueries = (
     return queries;
 }
 
+export const getFile = async ({
+    fileId,
+    bucketFileId,
+    path,
+}: GetFileProps) => {
+    try {
+
+        const { databases } = await createAdminClient();
+
+        const file = await databases.getDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.filesCollectionId,
+            fileId,
+        );
+        return parseStringify(file);
+    } catch (err) {
+        handleError(err, "Failed to get file");
+    }
+}
+
 export const getFiles = async ({
     types = [],
     searchText = "",
@@ -114,7 +134,6 @@ export const getFiles = async ({
             queries,
         );
 
-        console.log({ files });
         return parseStringify(files);
     } catch (error) {
         handleError(error, "Failed to get files");
@@ -176,6 +195,8 @@ export const deleteFile = async ({
     bucketFileId,
     path,
 }: DeleteFileProps) => {
+
+    const currentUser = await getCurrentUser();
     const { databases, storage } = await createAdminClient();
 
     try {
