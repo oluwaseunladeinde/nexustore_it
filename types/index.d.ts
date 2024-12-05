@@ -24,6 +24,7 @@ declare interface GetFilesProps {
     searchText?: string;
     sort?: string;
     limit?: number;
+    page?: number;
 }
 declare interface RenameFileProps {
     fileId: string;

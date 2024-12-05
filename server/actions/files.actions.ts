@@ -69,6 +69,7 @@ const createQueries = (
     types: string[],
     searchText: string,
     sort: string,
+    page?: number,
     limit?: number,
 ) => {
     const queries = [
@@ -81,6 +82,12 @@ const createQueries = (
     if (types.length > 0) queries.push(Query.equal("type", types));
     if (searchText) queries.push(Query.contains("name", searchText));
     if (limit) queries.push(Query.limit(limit));
+
+    if (page === 0) {
+        queries.push(Query.offset(0))
+    } else if (page && page >= 1) {
+        queries.push(Query.offset(page))
+    };
 
     if (sort) {
         const [sortBy, orderBy] = sort.split("-");
@@ -118,6 +125,7 @@ export const getFiles = async ({
     searchText = "",
     sort = "$createdAt-desc",
     limit,
+    page,
 }: GetFilesProps) => {
     const { databases } = await createAdminClient();
 
@@ -126,13 +134,13 @@ export const getFiles = async ({
 
         if (!currentUser) throw new Error("User not found");
 
-        const queries = createQueries(currentUser, types, searchText, sort, limit);
+        const queries = createQueries(currentUser, types, searchText, sort, page, limit);
 
         const files = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.filesCollectionId,
             queries,
-        );
+        )
 
         let totalSpace = 0;
 
@@ -140,7 +148,6 @@ export const getFiles = async ({
             totalSpace += file.size;
         });
 
-        // return parseStringify(files);
         return parseStringify({ files, totalSpace });
     } catch (error) {
         handleError(error, "Failed to get files");

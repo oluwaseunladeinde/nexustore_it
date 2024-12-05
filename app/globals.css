@@ -317,6 +317,11 @@
     @apply flex flex-col gap-2 text-light-100 !important;
   }
 
+  /* Pagination */
+  .pagination {
+    @apply flex w-full justify-end gap-3 cursor-pointer mt-6 rounded-lg bg-white p-5 shadow-sm transition-all hover:shadow-drop-3 !important;
+  }
+
   /* Chart */
   .chart {
     @apply flex items-center rounded-[20px] bg-brand p-5 text-white md:flex-col xl:flex-row !important;
